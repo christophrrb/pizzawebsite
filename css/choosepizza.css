@@ -1,0 +1,17 @@
+.floating-box {
+  display: inline-block;
+  width: 15%;
+  height: 190px;
+}
+
+.top-boxes {
+  display: inline-block;
+  width: 37.5%;
+}
+
+h1 {
+  text-align: center;
+  padding: 75px;
+
+#pizzaToppings {
+}

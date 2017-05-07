@@ -1,0 +1,29 @@
+body {
+  padding: 20%;
+}
+
+h1 {
+  padding-bottom: 20px;
+}
+
+#quickInfo {
+  border-width: 2px;
+  /*border-color: green;
+  border-style: solid;*/
+  padding-bottom: 20px;
+}
+
+/* #blocky1 {
+  height: 200px;
+} */
+
+#blocky {
+  display: inline-block;
+  width: 300px;
+  padding-right: 25px;
+  /*text-align: center;*/
+}
+
+#theDigits {
+  width: 300px;
+}
