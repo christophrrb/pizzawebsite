@@ -20,6 +20,7 @@
   error_reporting(E_ALL);
   require 'connect.php';
   session_start();
+  unset($pizza_b);
   $pizzaType = $_POST['typeofPizza'];
   $pizzaCrust = $_POST['crusts'];
   $pizzaToppings = $_POST['toppings'];
@@ -61,8 +62,8 @@
                     }
 
  if (isset($_SESSION['pizza'])) {
-   $pizza_b = array(
-     array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total"));
+   $pizza_b = //array(
+     array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
      array_push($_SESSION['pizza'], $pizza_b);
  } else {
    $_SESSION['pizza'] = array(

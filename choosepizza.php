@@ -159,12 +159,7 @@
 </label>
 </div>*/
 
-$_SESSION['pizza'] = array(
-  array("Regular", "Words", "Test", "Ok"),
-  array("Pepperoni", "Dictionary", "testig", "Alrihgt")
-);
 
-echo $_SESSION['pizza'][0][0];
 ?>
 </div>
 </div>

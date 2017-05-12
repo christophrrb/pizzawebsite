@@ -16,6 +16,11 @@
 
   <?php
   require 'connect.php';
+  $random = "random";
+  session_start();
+  // unset($random);
+  echo $_SESSION['hithere']." ".$_SESSION['byethere'];
+  echo $random;
   $pizza_type = $_POST['typeofPizza'];
   // $toppings = $_POST['exampleCheckboxes']; This is commented out because it's not necessary.
   // $meats = $_POST['meat'];

@@ -4,6 +4,8 @@ require 'connect.php';
 session_start();
 $_SESSION['hithere'] = "Hi there!";
 echo $_SESSION['hithere'];
+$_SESSION['byethere'] = "Bye there!";
+echo $_SESSION['byethere'];
 
 // For a single SQL row.
 $sql = "SELECT topping_category_desc FROM topping_categories LIMIT 1";  // Select ONLY one, instead of all
@@ -80,9 +82,6 @@ if ($catResult->num_rows > 0) {
   $words.= "there. <br>";
 
   echo $words;
-
-  session_unset();
-  session_destroy();
 ?>
 </table>
 <input type="submit">
