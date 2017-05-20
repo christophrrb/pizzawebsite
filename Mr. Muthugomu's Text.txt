@@ -1,0 +1,7 @@
+1. whatever the user has entered, capture them in a variable
+
+2. Query toppings table to get the chosen toppings price
+
+3. Build insert statement with the selected pizza, crust and the toppings total
+
+4. Finally insert the same into pizza table

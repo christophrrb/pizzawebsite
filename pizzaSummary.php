@@ -31,6 +31,8 @@
 
   $x = 0;
 
+//$topping_price_sql finds hthe price for all selected toppings from choosepizza.php. $crust_price_sql does the same for the crust.
+
   $topping_price_sql = "SELECT topping_price FROM toppings WHERE topping_desc IN
           ('$pizzaToppingsStringforSQL')";
   $crust_price_sql = "SELECT price FROM crust WHERE crust_desc IN ('$pizzaCrust') LIMIT 1";
@@ -54,15 +56,19 @@
             $total+= (float)$crustrow['price'];
             echo $total;
 
-    $sql = "INSERT INTO pizza(selected_type, selected_crust, pizza_desc, price)
+
+//This code puts the pizza's information into the database.
+/*    $sql = "INSERT INTO pizza(selected_type, selected_crust, pizza_desc, price)
                     VALUES ('$pizzaType', '$pizzaCrust', '$pizzaToppingsString', '$total')";
     $result = $conn->query($sql);
     if ($result) {
                       echo "<br></br>You have a $pizzaType pizza with $pizzaCrust crust and $pizzaToppingsString. <br>";
                     }
+*/
 
+// Code for putting the pizza into an array.
  if (isset($_SESSION['pizza'])) {
-   $pizza_b = //array(
+   $pizza_b =
      array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
      array_push($_SESSION['pizza'], $pizza_b);
  } else {
@@ -75,12 +81,16 @@
   ?>
   </div>
 
+<form action="orderDetails.php">
+  <button value="checkout">Checkout</button>
+</form>
   <!-- jQuery first, then Bootstrap JS. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
 </body>
 </html>
 
+<!--Trash-->
 <!--$prices_sql = "SELECT topping_price FROM toppings WHERE topping_desc LIKE (";
 
 while($row = $result->fetch_assoc()) {
