@@ -15,6 +15,10 @@
 </head>
 
 <body>
+  <?php
+  session_start();
+  $_SESSION['delivOption'] = $_REQUEST['delivOption'];
+  ?>
   <h1>Quick Information</h1>
 
   <form action="customerInfotoDatabase.php" method="post">

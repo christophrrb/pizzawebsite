@@ -12,23 +12,18 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 </head>
 
-<body style="padding: 75px">
-  <?php session_start();
-        session_id(uniqid());
-        echo session_id();
-  ?>
-  <form action="temporaryNameandPhone.php" method="post">
-  <h1 style="Text-align: center">Delivery Options</h1>
-<br>
-  <h2 style="text-align: center; color: darkgray">Carry Out or Delivery?</h2>
-  <div id="buttons" style="text-align: center">
-    <br>
-    <button type="submit" class="btn btn-primary" name="delivOption" value="Y" style="height: 100px; width:200px; font-size:35px">Carry Out</button>
-    <span style="color: white">This is just to"</span>
-    <button type="submit" class="btn btn-primary" name="delivOption" value="N" style="height: 100px; width:200px; font-size: 35px">Delivery</button>
-  </div>
+<body>
 
-</form>
+  <?php
+  session_start();
+  ?>
+  <h1>
+    Your order has been completed.
+  </h1>
+  <?php
+  session_unset();
+  session_destroy();
+  ?>
 
   <!-- jQuery first, then Bootstrap JS. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
