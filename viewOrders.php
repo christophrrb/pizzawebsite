@@ -13,51 +13,38 @@
 </head>
 
 <body>
+
+
+  <!--ADD CARRY OUT THING TO TABLE! And delete.-->
+
+
+
   <center><h1>Manage Orders</h1></center>
   <?php
     require 'connect.php';
 
+    //This is to select the orders and sort them by id to be displayed.
     $all_orders_sql = "SELECT * FROM orders ORDER BY order_id ASC";
     $all_orders_result = $conn->query($all_orders_sql);
     $all_orders_row = $all_orders_result->fetch_assoc();
     $num_rows = $all_orders_result->num_rows;
 
+    $z = 1; //This variable is used to count the pizza number for the order.
 
-    // if ($num_rows > 0) {
-    //     $array = array($all_orders_row_for_sql);
-    //
-    //     if ($x < $num_rows) {
-    //         while ($x < $num_rows) {
-    //         array_push($array, $all_orders_row_for_sql);
-    //       }
-    //     }
-    //   }else {
-    //     echo "It didn't work.";
-    // }
-
-    echo "<br></br>";
-    //var_dump($array);
-    // var_dump($all_orders_row_for_sql);
-    echo "<br></br>";
-
-
-    // var_dump($gonna_need_result);
-    // echo "<br>";
-    // var_dump($gonna_need_row);
-
-    $x = 0;
-    $y = 0;
-    $z = 1;
      if ($all_orders_result) {
       while ($all_orders_row = $all_orders_result->fetch_assoc()) {
+        //Echo the customer_id in one td, and "Pizzas" in another.
         echo "<table border=1px>
           <tr><td>Order #".$all_orders_row['customer_id']."</td><td>Pizzas</td></tr>";
+
+          /*$all_orders_row_for_sql type casts $all_orders_row into an int to be used in the SQL statement.
+
+          $gonna_need_sql = Selects the pizza's things from the pizza table that correspond to the order.
+          */
 
           $all_orders_row_for_sql = (int) $all_orders_row['order_id'];
           $gonna_need_sql = "SELECT selected_type, selected_crust, pizza_desc, price FROM pizza WHERE order_id=$all_orders_row_for_sql";
           $gonna_need_result = $conn->query($gonna_need_sql);
-
-          var_dump($all_orders_row_for_sql);
 
       while ($gonna_need_row = $gonna_need_result->fetch_assoc()) {
         echo
@@ -69,12 +56,9 @@
             <td>".$gonna_need_row['price']."</td>
           </tr>";
 
-        $y++;
         $z++;
       }
       echo "</table><br></br>";
-      $x++;
-      $y = 0;
       $z = 1;
     }
   } else {
