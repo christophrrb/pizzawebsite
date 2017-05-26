@@ -31,7 +31,7 @@
 
   $x = 0;
 
-//$topping_price_sql finds hthe price for all selected toppings from choosepizza.php. $crust_price_sql does the same for the crust.
+//$topping_price_sql finds the price for all selected toppings from choosepizza.php. $crust_price_sql does the same for the crust.
 
   $topping_price_sql = "SELECT topping_price FROM toppings WHERE topping_desc IN
           ('$pizzaToppingsStringforSQL')";

@@ -10,6 +10,9 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <!-- Redirects to choosepizza in five seconds. -->
+  <meta http-equiv="Refresh" content="5;url=choosepizza.php">
 </head>
 
 <body>
@@ -27,16 +30,21 @@
     //This will insert the customer's information into the database.
 
     $customerSQL = "INSERT INTO customer(first_name, last_name, email_id, pri_phone, alt_phone)
-    VALUES ('$firstName', '$lastName', '$email', '$phoneNumber', '$altPhoneNumber')";
+    VALUES ('$firstName', '$lastName', '$email', $phoneNumber, $altPhoneNumber)";
     $customerResult = $conn->query($customerSQL);
 
+    //Yes, I am grabbing the customer_id here, not storing it in a session variable, and then grabbing it again in the orderDetails.php page.
     $customer_id_SQL = "SELECT customer_id FROM customer ORDER BY customer_id DESC LIMIT 1";
     $customer_id_SQL_result = $conn->query($customer_id_SQL);
     /*foreach ($customer_id_SQL_result as $a) {
       var_dump($a);
     }*/
 
-
+    if ($customerResult) {
+      echo "The record was successfully created.";
+    } else {
+      echo "The record was not successfully created.";
+    }
 
     if ($customer_id_SQL_result) {
       echo "It  works.";
@@ -45,7 +53,7 @@
     }
 
     $addressSQL = "INSERT INTO addresses(customer_id, address_line_one, city_name, state_cd, postal_cd)
-                   VALUES ('$customer_id', '$address', '$city', '$state', '$zipCode')";
+                   VALUES ($customer_id, '$address', '$city', '$state', $zipCode)";
     $addressResult = $conn->query($addressSQL);
   }
 

@@ -17,7 +17,7 @@
         session_id(uniqid());
         echo session_id();
   ?>
-  <form action="choosepizza.php" method="post">
+  <form action="temporaryNameandPhone.php" method="post">
   <h1 style="Text-align: center">Delivery Options</h1>
 <br>
   <h2 style="text-align: center; color: darkgray">Carry Out or Delivery?</h2>

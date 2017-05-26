@@ -18,8 +18,6 @@
   <?php require 'connect.php';
   session_start();
   echo session_id();
-
-  $_SESSION['delivOption']
   ?>
 
 <!-- Type of Pizza -->
