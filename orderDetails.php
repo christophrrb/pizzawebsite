@@ -20,9 +20,23 @@
   $intoSQL = $_SESSION['pizza'];
   $delivOption = $_SESSION['delivOption'];
 
-     $order_sql = "INSERT INTO orders(carry_out)
-                   VALUES ('$delivOption')";
-     $order_result = $conn->query($order_sql);
+  //This links the order to the customer's id. It needs to be finished.
+  $order_to_customer_sql = "SELECT customer_id FROM customer ORDER BY customer_id DESC LIMIT 1";
+  $order_to_customer_result = $conn->query($order_to_customer_sql);
+  $order_to_customer_row = $order_to_customer_result->fetch_assoc();
+  $order_to_customer_row_for_if_statement = $order_to_customer_row['customer_id'];
+
+  if ($order_to_customer_result) {
+    $order_to_customer_insert_sql = "INSERT INTO orders(customer_id, carry_out)
+                                     VALUES($order_to_customer_row_for_if_statement, '$delivOption')";
+
+    $order_to_customer_insert_result = $conn->query($order_to_customer_insert_sql);
+  }
+
+  if ($order_to_customer_insert_result) {
+    echo "The customer's ID has been attached along with its record.";
+  }
+
 
      $grab_order_id = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1";
      $grab_order_id_result = $conn->query($grab_order_id);
@@ -54,24 +68,11 @@
         //This inserts the total price into the order record.
          $order_price_sql = "UPDATE orders
                                SET price = $order_total
-                               WHERE order_id='$order_id_row'";
+                               WHERE order_id=$order_id_row";
          $order_price_result = $conn->query($order_price_sql);
 
          if ($order_price_result) {
            echo "The order price has been submitted.";
-         }
-
-         //This links the order to the customer's id. It needs to be finished.
-         $order_to_customer_sql = "SELECT customer_id FROM customer ORDER BY customer_id DESC LIMIT 1";
-         $order_to_customer_result = $conn->query($order_to_customer_sql);
-         $order_to_customer_row = $order_to_customer_result->fetch_assoc();
-         $order_to_customer_row_for_if_statement = $order_to_customer_row['customer_id'];
-
-         if ($order_to_customer_result) {
-           $order_to_customer_update_sql = "UPDATE orders
-                                            SET customer_id = $order_to_customer_row_for_if_statement
-                                            WHERE order_id = '$order_id_row'";
-           $order_to_customer_update_result = $conn->query($order_to_customer_update_sql);
          }
 
 
@@ -97,3 +98,17 @@
 </body>
 
 </html>
+
+<!--Trash-->
+<!--
+//  $order_sql = "UPDATE orders
+//                SET column1 = value1, column2 = value2, ...
+//                WHERE condition;";
+//  $order_result = $conn->query($order_sql);
+//
+//  if ($order_result) {
+  //    echo "The delivery option has been stored into the database.";
+  //  } else {
+    //    echo "The delivery option has not been stored into the database, and the record has not been created.";
+    //  }
+-->
