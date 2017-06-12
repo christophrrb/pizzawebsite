@@ -97,7 +97,7 @@ $row = 0;
   //  $pizza_array = $_SESSION['pizza'];
    $pizza_array_col_zero = $_SESSION['pizza'][$row][0];
    echo "<tr>";
-   while ($col < 4) {
+   while ($col < 5) {
    echo "<td>".$_SESSION['pizza'][$row][$col]."</td>";
             $col++;
           }
@@ -105,7 +105,7 @@ $row = 0;
           </td>
           </tr>";
           $row++;
-      }
+      } //Add total price.
 
 // for ($row = 0; $row < 4; $row++) {
 //   echo "<p><b>Row number $row</b></p>";

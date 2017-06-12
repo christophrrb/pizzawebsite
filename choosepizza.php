@@ -23,15 +23,23 @@
 
 <?php
   if (isset($_SESSION['pizza'])) {
-    //This is not going to work for my multidimensional array.
+    //The toppings need to be put into a string before being pushed into the array.
     $array_id = $_REQUEST['row'];
     $pizza_array = array_slice($_SESSION['pizza'][$array_id], 1, 2);
-    $topping_slice = array_slice($_SESSION['pizza'][$array_id], 3);
+    $topping_slice = array_slice($_SESSION['pizza'][$array_id], 3,1);
     $topping_implode = implode("", $topping_slice);
-    var_dump($topping_implode);
     $topping_explode = explode(", ", $topping_implode);
-    $pizza_in_totality = array_push($pizza_array, $topping_slice);
+
+    $iteration = 0;
+    while($iteration < sizeof($topping_explode)) {
+      array_push($pizza_array, $topping_explode[$iteration]);
+      $iteration++;
+    }
+
+    // $pizza_in_totality = array_push($pizza_array, $topping_implode);
     print_r($pizza_array);
+
+    //Game plan: explode $topping_implode, but use a while loop to array_push() each  interation's value.
   } else {
     $toppingSplice = null;
     $toppingExplode = null;
