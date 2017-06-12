@@ -16,7 +16,10 @@
 </head>
 
 <body>
-  <?php require 'connect.php';
+  <?php
+  session_start();
+  $session_id = session_id();
+  require 'connect.php';
   $firstName = $_REQUEST['firstName'];
   $lastName = $_REQUEST['lastName'];
   $email = $_REQUEST['email'];
@@ -29,8 +32,8 @@
 
     //This will insert the customer's information into the database.
 
-    $customerSQL = "INSERT INTO customer(first_name, last_name, email_id, pri_phone, alt_phone)
-    VALUES ('$firstName', '$lastName', '$email', $phoneNumber, $altPhoneNumber)";
+    $customerSQL = "INSERT INTO customer(first_name, last_name, uniqid, email_id, pri_phone, alt_phone)
+    VALUES ('$firstName', '$lastName', '$session_id', '$email', $phoneNumber, $altPhoneNumber)";
     $customerResult = $conn->query($customerSQL);
 
     //Yes, I am grabbing the customer_id here, not storing it in a session variable, and then grabbing it again in the orderDetails.php page.

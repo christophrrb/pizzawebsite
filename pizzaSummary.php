@@ -26,6 +26,7 @@
   $pizzaToppings = $_POST['toppings'];
   $pizzaToppingsString = implode(", ", $pizzaToppings);
   $pizzaToppingsStringforSQL = implode("', '", $pizzaToppings);
+  $_SESSION['edit'] = false; //To avoid having to turn off error reporting to noot have this mess up choosepizza.php on first load, it can be declared somewhere else.
 
   // SELECT topping_price FROM toppings WHERE name in ($pizzaToppings);
 
@@ -67,28 +68,77 @@
 */
 
 // Code for putting the pizza into an array.
+$_SESSION['$array_id'] = 0;
+
  if (isset($_SESSION['pizza'])) {
    $pizza_b =
-     array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
+     array($_SESSION['array_id'], "$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
      array_push($_SESSION['pizza'], $pizza_b);
+     $_SESSION['array_id']++;
  } else {
    $_SESSION['pizza'] = array(
-     array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total"));
+     array($_SESSION['array_id'], "$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total"));
+     $_SESSION['array_id']++;
  }
 
  print_r($_SESSION['pizza']);
+?>
 
-  ?>
+<br><br><br><br>
+
+<table>
+<form action='choosepizza.php' method='post'>
+
+  <?php
+$row = 0;
+ while ($row < sizeof($_SESSION['pizza'],0)) {
+   $array_id = $_SESSION['array_id'];
+   $col = 1;
+  //  $pizza_array = $_SESSION['pizza'];
+   $pizza_array_col_zero = $_SESSION['pizza'][$row][0];
+   echo "<tr>";
+   while ($col < 4) {
+   echo "<td>".$_SESSION['pizza'][$row][$col]."</td>";
+            $col++;
+          }
+          echo "<td><button id='editButton' type='submit' name='row' value='$row'>Edit Pizza</button>
+          </td>
+          </tr>";
+          $row++;
+      }
+
+// for ($row = 0; $row < 4; $row++) {
+//   echo "<p><b>Row number $row</b></p>";
+//   echo "<ul>";
+//   for ($col = 0; $col < 3; $col++) {
+//     echo "<li>".$cars[$row][$col]."</li>";
+//   }
+//   echo "</ul>";
+// }
+
+   ?>
+
+ </form>
+ </table>
+
+   <script>
+  document.getElementById("editButton").onclick = function(){editTrue()};
+
+  function editTrue() {
+    <?php $_SESSION['edit'] = true;?>
+  }
+   </script>
+
   </div>
 
-<form action="orderDetails.php">
-  <button value="checkout">Checkout</button>
-</form>
-  <!-- jQuery first, then Bootstrap JS. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
-</body>
-</html>
+  <form action="orderDetails.php">
+    <button value="checkout">Checkout</button>
+  </form>
+    <!-- jQuery first, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+  </body>
+  </html>
 
 <!--Trash-->
 <!--$prices_sql = "SELECT topping_price FROM toppings WHERE topping_desc LIKE (";

@@ -13,8 +13,8 @@
 </head>
 
 <body style="padding: 75px">
-  <?php session_start();
-        session_id(uniqid());
+  <?php session_id(uniqid());
+        session_start();
         echo session_id();
   ?>
   <form action="temporaryNameandPhone.php" method="post">

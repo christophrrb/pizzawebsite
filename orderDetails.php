@@ -16,21 +16,24 @@
   <?php require 'connect.php';
    //Don't unset the variables in this page because there should be a button here allowing the user to return to change something. Do it on the next page. Or not, it's your choice. This could be the final page. In fact, I think I do want it to be the final page.
    session_start();
+   $session_id = session_id();
+   echo $session_id;
   $intoSQL = $_SESSION['pizza'];
   $delivOption = $_SESSION['delivOption'];
 
 
-  //This links the order to the customer's id. It needs to uniqid instead of LIMIT 1 because if two people are using the site simultaneously, then problems could arise.
-  $order_to_customer_sql = "SELECT customer_id FROM customer ORDER BY customer_id DESC LIMIT 1";
+  //This links the order to the customer's id.
+  $order_to_customer_sql = "SELECT customer_id FROM customer WHERE uniqid='$session_id'";
   $order_to_customer_result = $conn->query($order_to_customer_sql);
+  echo "<br></br>".var_dump($order_to_customer_result)."<br></br>";
   $order_to_customer_row = $order_to_customer_result->fetch_assoc();
-  $order_to_customer_row_for_if_statement = $order_to_customer_row['customer_id'];
+  $customer_id = $order_to_customer_row['customer_id'];
 
 
-//If the foreign key things work, then this puts the customer's id, carry out status, and order_status_cd into the database.
+//If the foreign key things work, then this puts the customer's id, carry out status, and order_status_cd into the orders table.
   if ($order_to_customer_result) {
     $order_to_customer_insert_sql = "INSERT INTO orders(customer_id, carry_out, order_status_cd)
-                                     VALUES($order_to_customer_row_for_if_statement, '$delivOption', 'Pending')";
+                                     VALUES($customer_id, '$delivOption', 'Pending')";
 
     $order_to_customer_insert_result = $conn->query($order_to_customer_insert_sql);
   }
@@ -41,7 +44,7 @@
 
 
   //This grabs the order_id.
-     $grab_order_id = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1";
+     $grab_order_id = "SELECT order_id FROM orders WHERE customer_id=$customer_id";
      $grab_order_id_result = $conn->query($grab_order_id);
      $grab_order_id_row = $grab_order_id_result->fetch_assoc();
      $order_id_row = $grab_order_id_row['order_id'];

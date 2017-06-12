@@ -18,7 +18,25 @@
   <?php require 'connect.php';
   session_start();
   echo session_id();
+  error_reporting(E_ALL);
   ?>
+
+<?php
+  if (isset($_SESSION['pizza'])) {
+    //This is not going to work for my multidimensional array.
+    $array_id = $_REQUEST['row'];
+    $pizza_array = array_slice($_SESSION['pizza'][$array_id], 1, 2);
+    $topping_slice = array_slice($_SESSION['pizza'][$array_id], 3);
+    $topping_implode = implode("", $topping_slice);
+    var_dump($topping_implode);
+    $topping_explode = explode(", ", $topping_implode);
+    $pizza_in_totality = array_push($pizza_array, $topping_slice);
+    print_r($pizza_array);
+  } else {
+    $toppingSplice = null;
+    $toppingExplode = null;
+  }
+   ?>
 
 <!-- Type of Pizza -->
   <div class="top-boxes">
@@ -33,16 +51,42 @@
     $sql = ("SELECT pizza_desc FROM pizza_type");
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+
+    if (isset($_SESSION['pizza']) && ($_SESSION['edit'] = true)) {
+      if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
-        echo "<div class='form-check'>
-      <label class='form-check-label'>
-        <input class='form-check-input' type='radio' name='typeofPizza' value='
-          ".$row['pizza_desc']." '>"
-        .$row['pizza_desc']."
-      </label>
-    </div>";
+        $pizza_desc = $row['pizza_desc'];
+
+        //Consider calling a function instead of pooping the code here.
+        if (in_array($pizza_desc, $pizza_array)) {
+          echo "<tr>
+                  <td>
+                    <div class='form-check'>
+                    <label class='form-check-label'>
+                    <input class='form-check-input' type='radio' name='typeofPizza' value='".$pizza_desc."' checked>".
+                    $pizza_desc."</label>
+                    </div></td></tr>";
+        } else {
+        echo "<tr>
+                <td>
+                  <div class='form-check'>
+                  <label class='form-check-label'>
+                  <input class='form-check-input' type='radio' name='typeofPizza' value='".$pizza_desc."'>".
+                  $pizza_desc."</label>
+                  </div></td></tr>";
+                }
+              }
+
+    //     echo "<div class='form-check'>
+    //   <label class='form-check-label'>
+    //     <input class='form-check-input' type='radio' name='typeofPizza' value='
+    //       ".$row['pizza_desc']." '>"
+    //     .$row['pizza_desc']."
+    //   </label>
+    // </div>";
       }
+    } else {
+
     }
 ?>
   </div>
@@ -63,12 +107,34 @@
   $sql = ("SELECT crust_desc FROM crust");
   $result = $conn->query($sql);
 
-  if ($result->num_rows > 0) {
+  if (isset($_SESSION['pizza'])) {
+    if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-      echo "<div class='form-check'>
-    <label class='form-check-label'>
-      <input class='form-check-input' type='radio' name='crusts' value='".$row['crust_desc']."'> ".$row['crust_desc']."</label>
-      </div>";
+      $crust_desc = $row['crust_desc'];
+      if (in_array($crust_desc, $pizza_array)) {
+        echo "<tr>
+                <td>
+                  <div class='form-check'>
+                  <label class='form-check-label'>
+                  <input class='form-check-input' type='radio' name='crusts' value='".$crust_desc."' checked>".
+                  $crust_desc."</label>
+                  </div></td></tr>";
+      } else {
+      echo "<tr>
+              <td>
+                <div class='form-check'>
+                <label class='form-check-label'>
+                <input class='form-check-input' type='radio' name='crusts' value='".$crust_desc."'>".
+                $crust_desc."</label>
+                </div></td></tr>";
+              }
+            }
+
+
+    //   echo "<div class='form-check'>
+    // <label class='form-check-label'>
+    //   <input class='form-check-input' type='radio' name='crusts' value='".$row['crust_desc']."'> ".$row['crust_desc']."</label>
+    //   </div>";
     }
   }
   ?>
@@ -99,64 +165,30 @@
 
             if ($cheeseToppingResult->num_rows > 0) {
               // Experimental code to get the prices on this too.
-              while ($cheeseToppingRow = $cheeseToppingResult->fetch_assoc())
-              {
+              while ($cheeseToppingRow = $cheeseToppingResult->fetch_assoc()) { $topping_desc = $cheeseToppingRow['topping_desc'];
+                if (in_array($topping_desc, $pizza_array)) {
+                  echo "<tr>
+                          <td>
+                            <div class='form-check'>
+                            <label class='form-check-label'>
+                            <input class='form-check-input' type='checkbox' name='toppings[]' value='".$topping_desc."' checked>".
+                            $topping_desc."</label>
+                            </div></td></tr>";
+                } else {
                 echo "<tr>
                         <td>
                           <div class='form-check'>
                           <label class='form-check-label'>
-                          <input class='form-check-input' type='checkbox' name='toppings[]' value='".$cheeseToppingRow['topping_desc']."'> ".
-                          $cheeseToppingRow['topping_desc'].
-                          "</label>
+                          <input class='form-check-input' type='checkbox' name='toppings[]' value='".$topping_desc."'>".
+                          $topping_desc."</label>
                           </div></td></tr>";
+                        }
               }
               echo "</table>";
             }
             $x++;
           }
         }
-
-        /* --------------*/
-
-        /*$sauceToppingSQL = ("SELECT topping_desc FROM toppings WHERE topping_category_id = 2");
-        $meatToppingSQL = ("SELECT topping_desc FROM toppings WHERE topping_category_id = 3");
-        $fandvToppingSQL = ("SELECT topping_desc FROM toppings WHERE topping_category_id = 4");
-
-        $sauceToppingResult = $conn->query($sauceToppingSQL);
-        $meatToppingResult = $conn->query($meatToppingSQL);
-        $fandvToppingResult = $conn->query($fandvToppingSQL);
-
-        if ($sauceToppingResult->num_rows > 0) {
-          echo "<tr>";
-          while ($sauceToppingRow = $sauceToppingResult->fetch_assoc()) {
-            echo "<td>".$sauceToppingRow['topping_desc']."</td>";
-          }
-          echo "</tr>";
-        }
-
-        if ($meatToppingResult->num_rows > 0) {
-            echo "<tr>";
-            while ($meatToppingRow = $meatToppingResult->fetch_assoc()) {
-              echo "<td>".$meatToppingRow['topping_desc']."</td>";
-            }
-            echo "</tr>";
-          }
-
-        if ($fandvToppingResult->num_rows > 0) {
-          echo "<tr>";
-          while ($fandvToppingRow = $fandvToppingResult->fetch_assoc()) {
-            echo "<td>".$fandvToppingRow['topping_desc']."</td>";
-          }
-          echo "</tr>";
-        }
-
-      /*  <div class="form-check">
-<label class="form-check-label">
-  <input class="form-check-input" type="checkbox" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-  Pepperoni
-</label>
-</div>*/
-
 
 ?>
 </div>
@@ -169,5 +201,4 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
 </body>
-
 </html>

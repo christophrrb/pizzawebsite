@@ -20,21 +20,31 @@
     require 'connect.php';
 
     //This is to select the orders and sort them by id to be displayed.
-    $all_orders_sql = "SELECT * FROM orders ORDER BY order_id ASC";
+    $all_orders_sql = "SELECT * FROM orders WHERE order_status_cd <> 'Canceled' ORDER BY order_id ASC";
     $all_orders_result = $conn->query($all_orders_sql);
-    $all_orders_row = $all_orders_result->fetch_assoc();
-    $num_rows = $all_orders_result->num_rows;
+    // $all_orders_row = $all_orders_result->fetch_assoc(); I commented this out because it's defined in the while statement. I didn't want a double definition.
+    // $all_orders_row_value = $all_orders_row['customer_id']; I commented this out because I don't think it's necessary.
+    // $num_rows = $all_orders_result->num_rows; I don't think this is being used.
 
     $z = 1; //This variable is used to count the pizza number for the order.
 
-     if ($all_orders_result) {
+     if ($all_orders_row = $all_orders_result->fetch_assoc()) {
       while ($all_orders_row = $all_orders_result->fetch_assoc()) {
+        $all_orders_row_value = $all_orders_row['customer_id'];
+        $customer_name_sql = "SELECT first_name, last_name FROM customer WHERE customer_id=$all_orders_row_value";
+        $customer_name_result = $conn->query($customer_name_sql);
+        $customer_name_row = $customer_name_result->fetch_assoc();
+        $customer_name = $customer_name_row['first_name']." ".$customer_name_row['last_name'];
+        $total_price = $all_orders_row['price'];
+
         //Echo the customer_id in one td, and "Pizzas" in another.
         echo "<table border=1px>
           <tr>
             <td>Order #".$all_orders_row['customer_id']."</td>
-            <td>Pizzas</td>
+            <td>$customer_name</td>
             <td>".$all_orders_row['order_status_cd']."</td>
+            <td>Carry Out: ".$all_orders_row['carry_out']."</td>
+            <td>Total Price: ".$total_price."<td>
           </tr>";
 
           /*$all_orders_row_for_sql type casts $all_orders_row into an int to be used in the SQL statement.
@@ -76,6 +86,11 @@
               <form action='functions/canceled.php' method='post'>
                 <button name='order_id' value='$all_orders_row_for_sql'>Canceled</button>
               </form>
+
+              <form action='functions/delete.php' method='post'>
+                <button name='order_id' value='$all_orders_row_for_sql'>Delete</button>
+              </form>
+
             <br><br><br><br>";
     }
   } else {

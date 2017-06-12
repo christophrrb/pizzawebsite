@@ -78,7 +78,7 @@
     <td>
     <div class="form-group">
    <label for="exampleSelect1"><br> State</label>
-   <select class="form-control" id="exampleSelect1">
+   <select class="form-control" id="exampleSelect1" name="state">
      <option name="state" value="AL">AL</option>
      <option name="state" value="AK">AK</option>
      <option name="state" value="AZ">AZ</option>
@@ -149,7 +149,6 @@
 
 <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-
 
   <!-- jQuery first, then Bootstrap JS. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
