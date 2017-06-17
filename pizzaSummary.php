@@ -21,12 +21,30 @@
   require 'connect.php';
   session_start();
   unset($pizza_b);
+
+  /*Before you do any of this, you need to add code to make the edited pizza its own array.
+
+  I don't know why I was playing games last night. That's not really true. This code actually needs to go down with the other array code and add an if/else statement.
+
+  Use the $_SESSION['array_splice'] variable to get that row you need. Check if $_SESSION['edit'] is true here, and if it is, then do an array splice (don't forget that it'll be like $cars[$row] because the array is multidimensional) to replace the edited record. The code should be similar to the following:
+
+$array_splice = $_SESSION['array_splice'];
+$replace_pizza = array($_SESSION['array_id'], "$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
+
+  if ($_SESSION['edit']) {
+  array_splice($_SESSION['pizza'][$array_splice], 0, 2, $replace_pizza);
+} else {
+
+}
+//} What is this doing here?
+
+  */
+
   $pizzaType = $_POST['typeofPizza'];
   $pizzaCrust = $_POST['crusts'];
   $pizzaToppings = $_POST['toppings'];
   $pizzaToppingsString = implode(", ", $pizzaToppings);
   $pizzaToppingsStringforSQL = implode("', '", $pizzaToppings);
-  $_SESSION['edit'] = false; //To avoid having to turn off error reporting to noot have this mess up choosepizza.php on first load, it can be declared somewhere else.
 
   // SELECT topping_price FROM toppings WHERE name in ($pizzaToppings);
 
@@ -67,15 +85,29 @@
                     }
 */
 
-// Code for putting the pizza into an array.
-$_SESSION['$array_id'] = 0;
 
- if (isset($_SESSION['pizza'])) {
+//The problem is that this boolean is always true unless otherwise defined, but sometimes I need it true, and sometimes I need it false coming from choosepizza.php, so I need to do some better implementation with this. Perhaps try not even using array_splice for the edit functionality, but instead unset. And email Mr. Muthugomu sometime :). And Mr. Gray. Go over songs for choir rehearsal too.
+
+$_SESSION['$array_id'] = 0;
+$edit_var = $_SESSION['edit'];
+
+var_dump($_SESSION['edit']);
+var_dump($_SESSION['array_splice']);
+
+print_r($edit_var);
+
+if (($edit_var) && ($_SESSION['array_splice'])) {
+    $array_splice = $_SESSION['array_splice'];
+    $pizza_b = array("$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
+    array_splice($_SESSION['pizza'][$array_splice], 1, 4, $pizza_b);
+}
+else if (isset($_SESSION['pizza'])) {
    $pizza_b =
      array($_SESSION['array_id'], "$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total");
      array_push($_SESSION['pizza'], $pizza_b);
      $_SESSION['array_id']++;
- } else {
+ }
+ else {
    $_SESSION['pizza'] = array(
      array($_SESSION['array_id'], "$pizzaType", "$pizzaCrust", "$pizzaToppingsString", "$total"));
      $_SESSION['array_id']++;
@@ -92,10 +124,9 @@ $_SESSION['$array_id'] = 0;
   <?php
 $row = 0;
  while ($row < sizeof($_SESSION['pizza'],0)) {
-   $array_id = $_SESSION['array_id'];
    $col = 1;
-  //  $pizza_array = $_SESSION['pizza'];
-   $pizza_array_col_zero = $_SESSION['pizza'][$row][0];
+   $pizza_array = $_SESSION['pizza'];
+  //  $pizza_array_col_zero = $_SESSION['pizza'][$row][0];
    echo "<tr>";
    while ($col < 5) {
    echo "<td>".$_SESSION['pizza'][$row][$col]."</td>";
@@ -106,16 +137,6 @@ $row = 0;
           </tr>";
           $row++;
       } //Add total price.
-
-// for ($row = 0; $row < 4; $row++) {
-//   echo "<p><b>Row number $row</b></p>";
-//   echo "<ul>";
-//   for ($col = 0; $col < 3; $col++) {
-//     echo "<li>".$cars[$row][$col]."</li>";
-//   }
-//   echo "</ul>";
-// }
-
    ?>
 
  </form>
@@ -139,33 +160,3 @@ $row = 0;
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
   </body>
   </html>
-
-<!--Trash-->
-<!--$prices_sql = "SELECT topping_price FROM toppings WHERE topping_desc LIKE (";
-
-while($row = $result->fetch_assoc()) {
-  $prices_sql.= "'";
-  $prices_sql.= $row;
-  $prices_sql.= "',";
-};
-$prices_sql.= ");";
-} else {
-echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-$result = $conn->query($prices_sql);
-if ($result) {
-   // Cycle through results
-  while ($row = $result->fetch_object()){
-      $user_arr[] = $row;
-  echo $row['topping_price']."<br>";
-}
-  // Free result set
-  $result->close();
-  $conn->next_result();
-} else {
-echo "Error: " . $prices_sql . "<br>" . $conn->error;
-}
-
-var_dump($user_arr);
-var_dump($row); -->
