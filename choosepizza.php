@@ -18,13 +18,14 @@
   <?php require 'connect.php';
   session_start();
   echo session_id();
-  error_reporting(E_ALL);
+  error_reporting(0);
   ?>
 
 <?php
   if (isset($_SESSION['pizza'])) {
     //The toppings need to be put into a string before being pushed into the array.
     $array_id = $_REQUEST['row'];
+    $_SESSION['array_splice'] =  $_REQUEST['row'];
     $pizza_array = array_slice($_SESSION['pizza'][$array_id], 1, 2);
     $topping_slice = array_slice($_SESSION['pizza'][$array_id], 3,1);
     $topping_implode = implode("", $topping_slice);
@@ -60,7 +61,6 @@
     $result = $conn->query($sql);
 
 
-    if (isset($_SESSION['pizza']) && ($_SESSION['edit'] = true)) {
       if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
         $pizza_desc = $row['pizza_desc'];
@@ -92,7 +92,6 @@
     //     .$row['pizza_desc']."
     //   </label>
     // </div>";
-      }
     } else {
 
     }
@@ -115,7 +114,6 @@
   $sql = ("SELECT crust_desc FROM crust");
   $result = $conn->query($sql);
 
-  if (isset($_SESSION['pizza'])) {
     if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
       $crust_desc = $row['crust_desc'];
@@ -144,7 +142,6 @@
     //   <input class='form-check-input' type='radio' name='crusts' value='".$row['crust_desc']."'> ".$row['crust_desc']."</label>
     //   </div>";
     }
-  }
   ?>
 </div>
 </div>
