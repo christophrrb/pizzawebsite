@@ -18,6 +18,7 @@
   <?php
   session_start();
   $_SESSION['delivOption'] = $_REQUEST['delivOption'];
+  $_SESSION['edit'] = false;
   ?>
   <h1>Quick Information</h1>
 
