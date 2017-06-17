@@ -57,13 +57,13 @@
    for ($x=0; $x < $y; $x++) {
      echo "Inserted in database.";
      echo $x;
-     echo $intoSQL[$x][0]."-".$intoSQL[$x][1]."-".$intoSQL[$x][2]."-".$intoSQL[$x][3];
-     $pizza_type = $intoSQL[$x][0];
-     $pizza_crust = $intoSQL[$x][1];
-     $pizza_toppings = $intoSQL[$x][2];
-     $pizza_price = $intoSQL[$x][3];
+     echo $intoSQL[$x][1]."-".$intoSQL[$x][2]."-".$intoSQL[$x][3]."-".$intoSQL[$x][4];
+     $pizza_type = $intoSQL[$x][1];
+     $pizza_crust = $intoSQL[$x][2];
+     $pizza_toppings = $intoSQL[$x][3];
+     $pizza_price = $intoSQL[$x][4];
         $sql = "INSERT INTO pizza(selected_type, selected_crust, pizza_desc, price, order_id)
-                         VALUES ('$pizza_type', '$pizza_crust', '$pizza_toppings', $pizza_price, '$order_id_row')";
+                VALUES ('$pizza_type', '$pizza_crust', '$pizza_toppings', $pizza_price, '$order_id_row')";
          $result = $conn->query($sql);
 
       $order_total += $pizza_price;
