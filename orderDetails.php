@@ -34,12 +34,16 @@
   if ($order_to_customer_result) {
     $order_to_customer_insert_sql = "INSERT INTO orders(customer_id, carry_out, order_status_cd)
                                      VALUES($customer_id, '$delivOption', 'Pending')";
-
+echo "customer id: $customer_id delivOption: $delivOption";
     $order_to_customer_insert_result = $conn->query($order_to_customer_insert_sql);
+  } else {
+    echo "order_to_customer_result did not work";
   }
 
   if ($order_to_customer_insert_result) {
     echo "The customer's ID has been attached along with its record.";
+  } else {
+    echo "The customer's ID has not been attached along with its record.";
   }
 
 
